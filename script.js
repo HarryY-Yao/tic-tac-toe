@@ -4,7 +4,15 @@ const game = (function() {
     const startButton = document.querySelector(".start");
     const restartButton = document.querySelector(".restart");
     const container = document.querySelector(".container");
+    const xTurnDisplay = document.querySelector(".turn-x");
+    const oTurnDisplay = document.querySelector(".turn-o");
     const body = document.querySelector("body");
+    const playerOnePrompt = document.querySelector(".player1");
+    const playerTwoPrompt = document.querySelector(".player2");
+    const playerOneName = document.getElementById("player-one-name");
+    const playerTwoName = document.getElementById("player-two-name");
+    const firstContinue = document.querySelector(".first");
+    const secondContinue = document.querySelector(".second");
     const winnerCard = document.querySelector(".winner-card");
     const winnerText = document.querySelector(".winner");
     const pop = new Audio('pop.mp3');
@@ -15,20 +23,48 @@ const game = (function() {
     let rowNum;
     let colNum;
 
-    const playerOne = createPlayer("p1", "X")
-    const playerTwo = createPlayer("p2", "O")
+    const playerOne = createPlayer("X", "X");
+    const playerTwo = createPlayer("O", "O");
+
+    firstContinue.addEventListener("click", (event) => {
+        if (playerOneName.value.length > 0) {
+            submitName(playerOne, playerOneName.value);
+        }
+        playerOnePrompt.classList.add("hidden");
+        playerTwoPrompt.classList.remove("hidden");
+        event.preventDefault();
+    })
+
+
+    secondContinue.addEventListener("click", (event) => {
+        if (playerTwoName.value.length > 0) {
+            submitName(playerTwo, playerTwoName.value);
+        }
+        playerTwoPrompt.classList.add("hidden");
+        restart();
+        event.preventDefault();
+    })
+
+
+    function submitName(player, playerName) {
+        player.name = playerName;
+    }
 
     function toggleTurn() {
         if (currentMark === "X") {
             currentMark = "O";
+            xTurnDisplay.classList.add("hidden");
+            oTurnDisplay.classList.remove("hidden");
             body.style.backgroundColor = "cornflowerblue";
         } else {
             currentMark = "X";
+            xTurnDisplay.classList.remove("hidden");
+            oTurnDisplay.classList.add("hidden");
             body.style.backgroundColor = "coral";
         }
     }
     restartButton.addEventListener("click", () => {
-        start();
+        restart();
     });
 
     startButton.addEventListener("click", () => {
@@ -99,38 +135,6 @@ const game = (function() {
         return freeSpaces;
     }
     
-    /* function playerOneMove(playerOne) {
-        do { 
-        rowNum = null
-        colNum = null
-
-        waitTurn();
-
-        if (gameBoard[rowNum][colNum] != ' ') {
-            console.log("Invalid Input");
-        } else {
-            gameBoard[rowNum][colNum] = playerOne.marker
-        }
-        
-        } while (gameBoard[rowNum][colNum] == ' ');
-    }
- */
-
-   /*  function playerTwoMove(playerTwo) {
-        do { 
-            rowNum = null
-            colNum = null
-    
-            waitTurn();
-    
-            if (gameBoard[rowNum][colNum] != ' ') {
-                console.log("Invalid Input");
-            } else {
-                gameBoard[rowNum][colNum] = playerTwo.marker
-            }
-            
-            } while (gameBoard[rowNum][colNum] == ' ');
-    } */
 
     
     function checkWinner() {
@@ -162,67 +166,48 @@ const game = (function() {
 
 
     function displayWinner() {
+        xTurnDisplay.classList.add("hidden");
+        oTurnDisplay.classList.add("hidden");
         winnerCard.classList.remove("hidden");
+        body.style.backgroundColor = "purple";
 
         if (winner == ' ') {
             winnerText.textContent = "Tie"
         } else if (winner == 'X') {
-            winnerText.textContent = `${playerOne.name}`;
+            winnerText.textContent = `${playerOne.getName()}`;
         } else {
-            winnerText.textContent = `${playerTwo.name}`;
+            winnerText.textContent = `${playerTwo.getName()}`;
         }
     }
 
 
     function createPlayer(name, marker) {
-        return { name, marker };
+
+        let _name = name;
+
+        return { getName: () => _name, set name(newName) {
+            _name = newName;
+            }
+        };
     }
 
-
     const start = () => {
+        startButton.classList.add("hidden");
+        playerOnePrompt.classList.remove("hidden");
+    }
+
+    const restart = () => {
         body.style.backgroundColor = "coral";
         currentMark = 'X';
         winner = ' ';
         resetBoard();
         displayBoard();
 
+        oTurnDisplay.classList.add("hidden");
+        xTurnDisplay.classList.remove("hidden");
         winnerCard.classList.add("hidden");
-        startButton.classList.add("hidden");
         container.classList.remove("hidden");
-
-        /* while (winner == ' ' && checkFreeSpaces() != 0) {
-            displayBoard();
-            
-            playerOneMove(playerOne);
-            winner = checkWinner();
-            if (winner != ' ' || checkFreeSpaces() == 0) {
-                break;
-            }
-            
-            displayBoard();
-
-            playerTwoMove(playerTwo);
-            winner = checkWinner();
-            if (winner != ' ' || checkFreeSpaces() == 0) {
-                break;
-            }
-        }
-
-        displayBoard();
-
-        if (winner == playerOne.marker) {
-            displayWinner(playerOne.name);
-        } else if (winner == playerTwo.marker) {
-            displayWinner(playerTwo.name);
-        } else {
-            console.log("--- it's a tie! ---");
-        } */
     }
-
-    return {
-        start
-    }
-
 
 })();
  

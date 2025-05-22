@@ -1,6 +1,7 @@
 * {
     margin: 0;
     box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 body {
@@ -10,6 +11,22 @@ body {
     align-items: center;
     min-height: 100vh;
     gap: 1em;
+}
+
+.turn-x, .turn-o {
+    font-size: 7rem;
+    font-weight: 700;
+    color: white;
+    position: absolute;
+    align-self: flex-start;
+}
+
+.turn-x {
+    left: 30px;
+}
+
+.turn-o {
+    right: 30px
 }
 
 .container {
@@ -74,6 +91,9 @@ body {
 
 h1 {
     font-size: 5em;
+    align-self: center;
+    justify-self: center;
+    text-align: center;
 }
 
 .winner {
