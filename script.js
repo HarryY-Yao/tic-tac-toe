@@ -140,14 +140,14 @@ const game = (function() {
     function checkWinner() {
         // checking the rows
         for (let i = 0; i < 3; i++) {
-            if (gameBoard[i][0] == gameBoard[i][1] && gameBoard[i][0] == gameBoard[i][2]) {
+            if (gameBoard[i][0] != ' ' && gameBoard[i][0] == gameBoard[i][1] && gameBoard[i][0] == gameBoard[i][2]) {
                 return gameBoard[i][0];
             }
         }
 
         // checking the columns
         for (let i = 0; i < 3; i++) {
-            if (gameBoard[0][i] == gameBoard[1][i] && gameBoard[0][i] == gameBoard[2][i]) {
+            if (gameBoard[0][i] != ' ' && gameBoard[0][i] == gameBoard[1][i] && gameBoard[0][i] == gameBoard[2][i]) {
                 return gameBoard[0][i];
             }
         }
